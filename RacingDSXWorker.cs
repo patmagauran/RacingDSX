@@ -1,6 +1,7 @@
 ﻿using RacingDSX.Config;
 using RacingDSX.GameParsers;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -68,13 +69,13 @@ namespace RacingDSX
             {
 				this.verboseLevel = level;
                 this.type = ReportType.VERBOSEMESSAGE;
-                this.message = String.Empty;
+                this.message = msg;
             }
 
             public RacingDSXReportStruct(string msg)
 			{
 				this.type = ReportType.VERBOSEMESSAGE;
-				this.message = String.Empty;
+				this.message = msg;
 			}
 
 			public ReportType type = 0;
@@ -186,11 +187,9 @@ namespace RacingDSX
 			}
 
 			int portNum;
+			IPAddress ipAddr;
 
-			if (!int.TryParse(portNumber.ToString(), out portNum))
-			{
-				// handle parse failure
-			}
+            if (!int.TryParse(portNumber.ToString(), out portNum))
 			{
 				if (progressReporter != null)
 				{
@@ -198,8 +197,16 @@ namespace RacingDSX
 				}
 				portNum = settings.DSXPort;
 			}
-
-			endPoint = new IPEndPoint(Triggers.localhost, portNum);
+			if (!IPAddress.TryParse(settings.DSXIPs[settings.SelectedDSXIP], out ipAddr))
+			{
+                if (progressReporter != null)
+				{
+                    progressReporter.Report(new RacingDSXReportStruct($"DSX provided a non-numerical IP! Using localhost."));
+                }
+                ipAddr = Triggers.localhost;
+            }
+            
+			 endPoint = new IPEndPoint(ipAddr, portNum);
 
 			try
 			{
@@ -299,9 +306,9 @@ namespace RacingDSX
 			}
 		}
 
-		protected bool bRunning = false;
+		protected bool bRunning = false; 
 
-		public void Run()
+        public void Run()
 		{
 			bRunning = true;
 			try
@@ -405,6 +412,7 @@ namespace RacingDSX
 			{
 				progressReporter.Report(new RacingDSXReportStruct($"Cleanup Finished. Exiting..."));
 			}
+			
 		}
 
 

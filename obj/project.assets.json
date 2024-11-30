@@ -195,6 +195,18 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
+      "Microsoft.NET.ILLink.Analyzers/7.0.100-1.23211.1": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Analyzers.props": {}
+        }
+      },
+      "Microsoft.NET.ILLink.Tasks/7.0.100-1.23211.1": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      },
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
@@ -417,6 +429,18 @@
         },
         "build": {
           "buildTransitive/netcoreapp3.1/_._": {}
+        }
+      },
+      "Microsoft.NET.ILLink.Analyzers/7.0.100-1.23211.1": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Analyzers.props": {}
+        }
+      },
+      "Microsoft.NET.ILLink.Tasks/7.0.100-1.23211.1": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
       "Newtonsoft.Json/13.0.1": {
@@ -683,6 +707,53 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.NET.ILLink.Analyzers/7.0.100-1.23211.1": {
+      "sha512": "0GvbEgDGcUQA9KuWcQU1WwYHXt1tBzNr1Nls/M57rM7NA/AndFwCaCEoJpJkmxRY7xLlPDBnmGp8h5+FNqUngg==",
+      "type": "package",
+      "path": "microsoft.net.illink.analyzers/7.0.100-1.23211.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "analyzers/dotnet/cs/ILLink.CodeFixProvider.dll",
+        "analyzers/dotnet/cs/ILLink.RoslynAnalyzer.dll",
+        "build/Microsoft.NET.ILLink.Analyzers.props",
+        "microsoft.net.illink.analyzers.7.0.100-1.23211.1.nupkg.sha512",
+        "microsoft.net.illink.analyzers.nuspec"
+      ]
+    },
+    "Microsoft.NET.ILLink.Tasks/7.0.100-1.23211.1": {
+      "sha512": "tvG8XZYLjT0o3WicCyKBZysVWo1jC9HdCFmNRmddx3WbAz0UCsd0qKZqpiEo99VLA8Re+FzWK51OcRldQPbt2Q==",
+      "type": "package",
+      "path": "microsoft.net.illink.tasks/7.0.100-1.23211.1",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "Sdk/Sdk.props",
+        "build/6.0_suppressions.xml",
+        "build/Microsoft.NET.ILLink.Tasks.props",
+        "build/Microsoft.NET.ILLink.targets",
+        "microsoft.net.illink.tasks.7.0.100-1.23211.1.nupkg.sha512",
+        "microsoft.net.illink.tasks.nuspec",
+        "tools/net472/ILLink.Tasks.dll",
+        "tools/net472/Mono.Cecil.dll",
+        "tools/net472/System.Buffers.dll",
+        "tools/net472/System.Collections.Immutable.dll",
+        "tools/net472/System.Memory.dll",
+        "tools/net472/System.Numerics.Vectors.dll",
+        "tools/net472/System.Reflection.Metadata.dll",
+        "tools/net472/System.Runtime.CompilerServices.Unsafe.dll",
+        "tools/net7.0/ILLink.Tasks.deps.json",
+        "tools/net7.0/ILLink.Tasks.dll",
+        "tools/net7.0/Mono.Cecil.Pdb.dll",
+        "tools/net7.0/Mono.Cecil.dll",
+        "tools/net7.0/illink.deps.json",
+        "tools/net7.0/illink.dll",
+        "tools/net7.0/illink.runtimeconfig.json"
+      ]
+    },
     "Newtonsoft.Json/13.0.1": {
       "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "type": "package",
@@ -742,28 +813,32 @@
       "Microsoft.Extensions.Configuration.Binder >= 6.0.0",
       "Microsoft.Extensions.Configuration.EnvironmentVariables >= 6.0.0",
       "Microsoft.Extensions.Configuration.Ini >= 6.0.0",
+      "Microsoft.NET.ILLink.Analyzers >= 7.0.100-1.23211.1",
+      "Microsoft.NET.ILLink.Tasks >= 7.0.100-1.23211.1",
       "Newtonsoft.Json >= 13.0.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\apple\\.nuget\\packages\\": {}
+    "C:\\Users\\patma\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\apple\\RiderProjects\\RacingDSX\\RacingDSX.csproj",
+      "projectUniqueName": "C:\\Users\\patma\\source\\repos\\RacingDSX\\RacingDSX.csproj",
       "projectName": "RacingDSX",
-      "projectPath": "C:\\Users\\apple\\RiderProjects\\RacingDSX\\RacingDSX.csproj",
-      "packagesPath": "C:\\Users\\apple\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\apple\\RiderProjects\\RacingDSX\\obj\\",
+      "projectPath": "C:\\Users\\patma\\source\\repos\\RacingDSX\\RacingDSX.csproj",
+      "packagesPath": "C:\\Users\\patma\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\patma\\source\\repos\\RacingDSX\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\apple\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\patma\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0-windows"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -798,6 +873,18 @@
             "target": "Package",
             "version": "[6.0.0, )"
           },
+          "Microsoft.NET.ILLink.Analyzers": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[7.0.100-1.23211.1, )",
+            "autoReferenced": true
+          },
+          "Microsoft.NET.ILLink.Tasks": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[7.0.100-1.23211.1, )",
+            "autoReferenced": true
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.1, )"
@@ -816,16 +903,36 @@
         "warn": true,
         "downloadDependencies": [
           {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[7.0.17, 7.0.17]"
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[7.0.14, 7.0.14]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[7.0.17, 7.0.17]"
+            "version": "[7.0.14, 7.0.14]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[7.0.14, 7.0.14]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[7.0.17, 7.0.17]"
+            "version": "[7.0.14, 7.0.14]"
           }
         ],
         "frameworkReferences": {
@@ -836,7 +943,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\apple\\.dotnet\\sdk\\7.0.407\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

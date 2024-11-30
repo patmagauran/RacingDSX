@@ -169,6 +169,10 @@ namespace RacingDSX
             toolStripAppCheckButton = new System.Windows.Forms.ToolStripDropDownButton();
             toolStripAppCheckOffItem = new System.Windows.Forms.ToolStripMenuItem();
             toolStripAppCheckOnItem = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripDSXIPButton = new System.Windows.Forms.ToolStripDropDownButton();
+            toolStripDSXIPTextBox = new System.Windows.Forms.ToolStripTextBox();
+            toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             toolTip = new System.Windows.Forms.ToolTip(components);
             ProfilesContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
             newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -178,6 +182,8 @@ namespace RacingDSX
             copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             setActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            IPRightClickContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
+            IPRightClickContextMenu_Delete = new System.Windows.Forms.ToolStripMenuItem();
             mainPanel.SuspendLayout();
             ((ISupportInitialize)mainSplitContainer).BeginInit();
             mainSplitContainer.Panel1.SuspendLayout();
@@ -253,6 +259,7 @@ namespace RacingDSX
             noRaceGroupBox.SuspendLayout();
             statusStrip1.SuspendLayout();
             ProfilesContextMenu.SuspendLayout();
+            IPRightClickContextMenu.SuspendLayout();
             SuspendLayout();
             // 
             // mainPanel
@@ -368,6 +375,7 @@ namespace RacingDSX
             miscTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             miscTableLayoutPanel.Size = new System.Drawing.Size(1592, 1180);
             miscTableLayoutPanel.TabIndex = 0;
+            miscTableLayoutPanel.Paint += miscTableLayoutPanel_Paint;
             // 
             // forzaPortNumericUpDown
             // 
@@ -642,7 +650,6 @@ namespace RacingDSX
             brakeResistanceSmoothNumericUpDown.Cursor = System.Windows.Forms.Cursors.IBeam;
             brakeResistanceSmoothNumericUpDown.Location = new System.Drawing.Point(781, 936);
             brakeResistanceSmoothNumericUpDown.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            brakeResistanceSmoothNumericUpDown.Maximum = new decimal(new int[] { 100, 0, 0, 0 });
             brakeResistanceSmoothNumericUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             brakeResistanceSmoothNumericUpDown.Name = "brakeResistanceSmoothNumericUpDown";
             brakeResistanceSmoothNumericUpDown.Size = new System.Drawing.Size(66, 31);
@@ -2131,7 +2138,7 @@ namespace RacingDSX
             // statusStrip1
             // 
             statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusDSX, toolStripStatusForza, toolStripVerboseMode, toolStripDSXPortButton, toolStripAppCheckButton });
+            statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripStatusDSX, toolStripStatusForza, toolStripVerboseMode, toolStripDSXPortButton, toolStripAppCheckButton, toolStripDSXIPButton });
             statusStrip1.Location = new System.Drawing.Point(0, 1228);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 20, 0);
@@ -2181,6 +2188,42 @@ namespace RacingDSX
             toolStripAppCheckOnItem.Size = new System.Drawing.Size(140, 34);
             toolStripAppCheckOnItem.Text = "On";
             toolStripAppCheckOnItem.Click += toolStripAppCheckOnItem_Click;
+            // 
+            // toolStripDSXIPButton
+            // 
+            toolStripDSXIPButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            toolStripDSXIPButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { toolStripDSXIPTextBox, toolStripMenuItem2 });
+            toolStripDSXIPButton.Image = (System.Drawing.Image)resources.GetObject("toolStripDSXIPButton.Image");
+            toolStripDSXIPButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            toolStripDSXIPButton.Name = "toolStripDSXIPButton";
+            toolStripDSXIPButton.Size = new System.Drawing.Size(84, 29);
+            toolStripDSXIPButton.Text = "DSX IP";
+            toolStripDSXIPButton.Click += toolStripDSXIPButton_Click;
+            // 
+            // toolStripDSXIPTextBox
+            // 
+            toolStripDSXIPTextBox.MaxLength = 15;
+            toolStripDSXIPTextBox.Name = "toolStripDSXIPTextBox";
+            toolStripDSXIPTextBox.Size = new System.Drawing.Size(100, 31);
+            toolStripDSXIPTextBox.Text = "0";
+            toolStripDSXIPTextBox.KeyDown += toolStripDSXIPTextBox_KeyDown;
+            // 
+            // toolStripMenuItem2
+            // 
+            toolStripMenuItem2.Checked = true;
+            toolStripMenuItem2.CheckState = System.Windows.Forms.CheckState.Checked;
+            toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { deleteToolStripMenuItem1 });
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new System.Drawing.Size(190, 34);
+            toolStripMenuItem2.Text = "127.0.0.1";
+            toolStripMenuItem2.Click += toolStripMenuItem2_Click;
+            // 
+            // deleteToolStripMenuItem1
+            // 
+            deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
+            deleteToolStripMenuItem1.Size = new System.Drawing.Size(164, 34);
+            deleteToolStripMenuItem1.Text = "Delete";
+            deleteToolStripMenuItem1.Click += deleteToolStripMenuItem1_Click;
             // 
             // ProfilesContextMenu
             // 
@@ -2237,6 +2280,19 @@ namespace RacingDSX
             setActiveToolStripMenuItem.Size = new System.Drawing.Size(162, 32);
             setActiveToolStripMenuItem.Text = "Set Active";
             setActiveToolStripMenuItem.Click += setActiveToolStripMenuItem_Click;
+            // 
+            // IPRightClickContextMenu
+            // 
+            IPRightClickContextMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
+            IPRightClickContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { IPRightClickContextMenu_Delete });
+            IPRightClickContextMenu.Name = "IPRightClickContextMenu";
+            IPRightClickContextMenu.Size = new System.Drawing.Size(149, 36);
+            // 
+            // IPRightClickContextMenu_Delete
+            // 
+            IPRightClickContextMenu_Delete.Name = "IPRightClickContextMenu_Delete";
+            IPRightClickContextMenu_Delete.Size = new System.Drawing.Size(148, 32);
+            IPRightClickContextMenu_Delete.Text = "Remove";
             // 
             // UI
             // 
@@ -2334,6 +2390,7 @@ namespace RacingDSX
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ProfilesContextMenu.ResumeLayout(false);
+            IPRightClickContextMenu.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -2484,5 +2541,11 @@ namespace RacingDSX
         private System.Windows.Forms.Button RemoveExecutableButton;
         private System.Windows.Forms.Label GameModeLabel;
         private System.Windows.Forms.ComboBox GameModeComboBox;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDSXIPButton;
+        private System.Windows.Forms.ToolStripTextBox toolStripDSXIPTextBox;
+        private System.Windows.Forms.ContextMenuStrip IPRightClickContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem IPRightClickContextMenu_Delete;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
     }
 }

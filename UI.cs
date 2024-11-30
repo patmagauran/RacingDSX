@@ -3,6 +3,7 @@ using RacingDSX.GameParsers;
 using RacingDSX.Properties;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 //using System.Configuration;
@@ -59,6 +60,10 @@ namespace RacingDSX
 
         public void Output(string Text, bool bShowMessageBox = false)
         {
+            if (Text.Equals(""))
+            {
+                return;
+            }
             outputListBox.Items.Insert(0, Text);
 
             if (outputListBox.Items.Count > 50)
@@ -210,6 +215,10 @@ namespace RacingDSX
                 return;
             if (currentSettings.ActiveProfile == null)
                 return;
+            forzaThreadCancellationToken = new CancellationTokenSource();
+            forzaThreadToken = forzaThreadCancellationToken.Token;
+
+            forzaThreadToken.Register(() => RacingDSXWorker.Stop());
             RacingDSXThread = new Thread(new ThreadStart(RacingDSXWorker.Run));
             RacingDSXThread.IsBackground = true;
 
@@ -223,6 +232,7 @@ namespace RacingDSX
                 if (RacingDSXThread != null
                     && forzaThreadCancellationToken != null)
                 {
+                    Debug.WriteLine("Stopping RacingDSX Thread");
                     forzaThreadCancellationToken.Cancel();
                 }
             }
@@ -231,6 +241,7 @@ namespace RacingDSX
 
                 throw;
             }
+            System.Threading.Thread.Sleep(1100);
 
             RacingDSXThread = null;
         }
@@ -345,6 +356,39 @@ namespace RacingDSX
                 verboseModeLowToolStripMenuItem.Checked = currentSettings.VerboseLevel == VerboseLevel.Limited;
                 verboseModeFullToolStripMenuItem.Checked = currentSettings.VerboseLevel == VerboseLevel.Full;
                 toolStripDSXPortButton.Text = "DSX Port: " + currentSettings.DSXPort.ToString();
+                toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+
+                toolStripDSXIPButton.DropDownItems.Clear();
+                toolStripDSXIPButton.DropDownItems.Add(toolStripDSXIPTextBox);
+
+                foreach (String ip in currentSettings.DSXIPs)
+                {
+                    System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+                    System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+                    deleteToolStripMenuItem2.Text = "Delete";
+                    deleteToolStripMenuItem2.Click += deleteToolStripMenuItem1_Click;
+                    toolStripMenuItem3.CheckState = System.Windows.Forms.CheckState.Checked;
+                    toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { deleteToolStripMenuItem2 });
+                    toolStripMenuItem3.Size = new System.Drawing.Size(270, 34);
+                    toolStripMenuItem3.Text = ip;
+                    toolStripMenuItem3.Click += toolStripMenuItem2_Click;
+
+                    if (ip == currentSettings.DSXIPs[currentSettings.SelectedDSXIP])
+                    {
+                        toolStripMenuItem3.Checked = true;
+                    } else
+                    {
+                        toolStripMenuItem3.Checked = false;
+                    }
+
+                    
+
+
+                    toolStripDSXIPButton.DropDownItems.Add(toolStripMenuItem3);
+                }
+
+
+
                 toolStripVerboseMode.Text = "Verbose Mode: " + currentSettings.VerboseLevel.ToString();
             }
             catch (Exception e)
@@ -377,6 +421,35 @@ namespace RacingDSX
             toolStripDSXPortButton.Text = "DSX Port: " + currentSettings.DSXPort.ToString();
             toolStripDSXPortTextBox.Text = currentSettings.DSXPort.ToString();
 
+            toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+            toolStripDSXIPTextBox.Text = currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+            toolStripDSXIPButton.DropDownItems.Clear();
+            toolStripDSXIPButton.DropDownItems.Add(toolStripDSXIPTextBox);
+            foreach (String ip in currentSettings.DSXIPs)
+            {
+                System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+                System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+                deleteToolStripMenuItem2.Text = "Delete";
+                deleteToolStripMenuItem2.Click += deleteToolStripMenuItem1_Click;
+                toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { deleteToolStripMenuItem2 });
+                toolStripMenuItem3.Size = new System.Drawing.Size(270, 34);
+                toolStripMenuItem3.Text = ip;
+                toolStripMenuItem3.Click += toolStripMenuItem2_Click;
+
+                if (ip == currentSettings.DSXIPs[currentSettings.SelectedDSXIP])
+                {
+                    toolStripMenuItem3.Checked = true;
+                }
+                else
+                {
+                    toolStripMenuItem3.Checked = false;
+                }
+
+
+
+
+                toolStripDSXIPButton.DropDownItems.Add(toolStripMenuItem3);
+            }
 
             loadProfilesIntoList();
             SwitchDisplayedProfile();
@@ -1404,7 +1477,7 @@ namespace RacingDSX
                 {
                     string message = "You cannot have a duplicate Executable Name! Executable already part of Profile " + prof.First().Name;
                     MessageBox.Show(message);
-                    return; 
+                    return;
                 }
                 int index = selectedProfile.executableNames.IndexOf(oldExecutableName);
                 executables[index] = newExecutableName;
@@ -1459,6 +1532,127 @@ namespace RacingDSX
                     break;
             }
 
+        }
+
+        private void miscTableLayoutPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+
+
+        private void toolStripDSXIPButton_Click(object sender, EventArgs e)
+        {
+           /* try
+            {
+                currentSettings.DSXIP = toolStripDSXIPTextBox.Text;
+                ConfigHandler.SaveConfig();
+
+            }
+            catch (Exception)
+            {
+                toolStripDSXIPTextBox.Text = currentSettings.DSXIP.ToString();
+            }
+            toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIP.ToString();*/
+        }
+
+        private void toolStripDSXIPTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == (char)Keys.Enter)
+            {
+                System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+                System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+                deleteToolStripMenuItem2.Text = "Delete";
+                deleteToolStripMenuItem2.Click += deleteToolStripMenuItem1_Click;
+                toolStripMenuItem3.Checked = true;
+                toolStripMenuItem3.CheckState = System.Windows.Forms.CheckState.Checked;
+                toolStripMenuItem3.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { deleteToolStripMenuItem2 });
+                toolStripMenuItem3.Size = new System.Drawing.Size(270, 34);
+                toolStripMenuItem3.Text = toolStripDSXIPTextBox.Text;
+                toolStripMenuItem3.Click += toolStripMenuItem2_Click;
+
+                toolStripDSXIPButton.DropDownItems.Add(toolStripMenuItem3);
+
+                foreach (ToolStripItem item in toolStripDSXIPButton.DropDownItems)
+                {
+                    if (item is ToolStripMenuItem)
+                    {
+                        ((ToolStripMenuItem)item).Checked = false;
+                    }
+                }
+                toolStripMenuItem3.Checked = true;
+                try
+                {
+                    currentSettings.DSXIPs.Add(toolStripDSXIPTextBox.Text);
+                    currentSettings.SelectedDSXIP = currentSettings.DSXIPs.Count - 1;
+                    ConfigHandler.SaveConfig();
+                    StopRacingDSXThread();
+                    StartRacingDSXThread();
+                }
+                catch (Exception)
+                {
+                    toolStripDSXIPButton.DropDownItems.Remove(toolStripMenuItem3);
+                    toolStripDSXIPTextBox.Text = currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+                }
+                toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+
+
+            }
+        }
+
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            foreach (ToolStripItem item in toolStripDSXIPButton.DropDownItems)
+            {
+                if (item is ToolStripMenuItem)
+                {
+                    ((ToolStripMenuItem)item).Checked = false;
+                }
+            }
+            ((System.Windows.Forms.ToolStripMenuItem)sender).Checked = true;
+            toolStripDSXIPTextBox.Text = ((System.Windows.Forms.ToolStripMenuItem)sender).Text;
+            currentSettings.SelectedDSXIP = currentSettings.DSXIPs.IndexOf(((System.Windows.Forms.ToolStripMenuItem)sender).Text);
+            toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+
+            ConfigHandler.SaveConfig();
+            StopRacingDSXThread();
+            StartRacingDSXThread();
+        }
+
+        private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            toolStripDSXIPButton.DropDownItems.Remove(((System.Windows.Forms.ToolStripMenuItem)sender).OwnerItem);
+            foreach (ToolStripItem item in toolStripDSXIPButton.DropDownItems)
+            {
+                if (item is ToolStripMenuItem)
+                {
+                    if (((ToolStripMenuItem)item).Text == currentSettings.DSXIPs[0])
+                    {
+                        ((ToolStripMenuItem)item).Checked = true;
+                    }
+                    else
+                    {
+                        ((ToolStripMenuItem)item).Checked = false;
+                    }
+                }
+            }
+
+            try
+            {
+                currentSettings.DSXIPs.Remove(toolStripDSXIPTextBox.Text);
+                currentSettings.SelectedDSXIP = 0;
+                toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+                ConfigHandler.SaveConfig();
+                StopRacingDSXThread();
+                StartRacingDSXThread();
+            }
+            catch (Exception)
+            {
+                toolStripDSXIPTextBox.Text = currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+                toolStripDSXIPButton.Text = "DSX IP: " + currentSettings.DSXIPs[currentSettings.SelectedDSXIP].ToString();
+
+            }
         }
     }
 }

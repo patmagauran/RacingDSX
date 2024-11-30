@@ -2,4 +2,6 @@
 .vscode
 .idea
 /bin
-/obj
+obj/**
+publish/** 
+
